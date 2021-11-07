@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Using Radiant to make Diabotical maps</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="\css\markdown10.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Using Radiant to make Diabotical maps</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#setup">Setup</a></li>
+<li><a href="#restrictions">Restrictions</a></li>
+<li><a href="#supported-features">Supported Features</a>
+<ul>
+<li><a href="#material-translation">Material Translation</a></li>
+<li><a href="#player-spawns">Player Spawns</a></li>
+<li><a href="#race-start--race-end">Race Start &amp; Race End</a></li>
+<li><a href="#kill-trigger">Kill Trigger</a></li>
+<li><a href="#teleporter">Teleporter</a></li>
+<li><a href="#weapons">Weapons</a></li>
+<li><a href="#remove-weapons-trigger">Remove Weapons Trigger</a></li>
+</ul></li>
+</ul>
+</nav>
+<h2 id="setup">Setup</h2>
+<ol type="1">
+<li><p>Download the map converter tool <a href="/downloads/mapper_v1_debug.7z">here</a></p></li>
+<li><p>If you do not already have radiant, you can download it here: <a href="https://github.com/Garux/netradiant-custom/releases">NetRadiantCustom</a></p></li>
+<li><p>Place <code>mapper.exe</code>, <code>dbt_template_v26.rbe</code>, and <code>q3_dbt_materials.txt</code> in Radiant's main directory (where <code>radiant.exe</code> lives)</p></li>
+<li><p>Open up Radiant and go to <code>Build-&gt;Customize...</code></p></li>
+<li><p>Scroll to the end of the build menu and click on the <code>...</code> to create a new item</p></li>
+<li><p>Set the commandline for the new build menu item to the following:</p>
+<pre class="b"><code>mapper.exe q3-dbt &quot;[MapFile]&quot; &quot;%APPDATA%\\Diabotical\\Maps\\[MapName].rbe&quot;</code></pre>
+<p><img src="q3-dbt-build-menu.gif" alt="Image" /></p></li>
+</ol>
+<p>You can now go ahead and start mapping in radiant. If everything worked correctly the new build option should create a Diabotical map with the same name as your Quake 3 map. If you have Diabotical open you can then use <code>/edit my_map_name</code> to load it.</p>
+<h2 id="restrictions">Restrictions</h2>
+<ul>
+<li>Brushes have to be aligned on the 32x32 unit grid to be mapped over properly. (Radiant default bind: <code>6</code> - sets grid size to 32u)</li>
+<li>Each 32 units in radiant maps to 1 block in DBT.</li>
+<li>If you want to make half blocks or 'slabs' in DBT (used for stairs, etc.), you can work <strong>vertically</strong> at the 16 unit grid level which translates to a single slab in DBT. (default bind: <code>5</code> sets grid size to 16u)</li>
+</ul>
+<p>Here you can see a 16 unit tall brush get converted to a single slab in DBT:</p>
+<p><img src="radiant_16u_step.jpg" alt="16 unit step in radiant" /><img src="dbt_slab_step.jpg" alt="DBT slab step" /></p>
+<h2 id="supported-features">Supported Features</h2>
+<h3 id="material-translation">Material Translation</h3>
+<p>You can convert quake 3 materials to DBT materials by adding entries in the <code>q3_dbt_materials.txt</code> file.</p>
+<pre><code>1hueta/oldstone1=sport_concrete01_red
+1hueta/oldstone7=concrete_wall_01</code></pre>
+<p><img src="q3_dbt_materials.jpg" alt="Quake 3 material to DBT example" /></p>
+<h3 id="player-spawns">Player Spawns</h3>
+<p>Create spawns using an <code>info_player_start</code> entity.</p>
+<p>Supported keys: <code>angle</code></p>
+<p><img src="q3_dbt_spawn.jpg" alt="Quake 3 spawn to DBT" /></p>
+<h3 id="race-start--race-end">Race Start &amp; Race End</h3>
+<p>Connect a <code>trigger_multiple</code> brush to a <code>target_startTimer</code> or <code>target_stopTimer</code> entity.</p>
+<p><img src="q3_dbt_race_start.jpg" alt="quake 3 to dbt race start" /></p>
+<h3 id="kill-trigger">Kill Trigger</h3>
+<p>Connect a <code>trigger_multiple</code> brush to a <code>target_kill</code> entity.</p>
+<h3 id="teleporter">Teleporter</h3>
+<p>Connect a <code>trigger_teleport</code> brush to a <code>misc_teleporter_dest</code> entity.</p>
+<p>The <code>trigger_teleport</code> entity supports the following keys: <code>speed_mode</code>, <code>speed</code>, <code>angle_mode</code>, <code>view_angle_mode</code>, <code>reset</code></p>
+<p>The <code>misc_teleporter_dest</code> entity supports the following keys: <code>angle</code></p>
+<p><img src="q3_dbt_teleporter.jpg" alt="quake 3 to dbt teleporter" /></p>
+<h3 id="weapons">Weapons</h3>
+<p>The following weapon entities are converted: <code>weapon_rocketlauncher</code>, <code>weapon_plasmagun</code></p>
+<p>Supported keys: <code>time</code> - sets pickup respawn time in seconds</p>
+<p><img src="q3_dbt_weps.jpg" alt="quake 3 to dbt weapons" /></p>
+<h3 id="remove-weapons-trigger">Remove Weapons Trigger</h3>
+<p>Connect a <code>trigger_multiple</code> brush to a <code>target_init</code> entity.</p>
+<p><img src="q3_dbt_reset_weps.jpg" alt="quake3 to dbt reset weps" /></p>
+</body>
+</html>

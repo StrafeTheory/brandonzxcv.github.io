@@ -1,6 +1,6 @@
 ## Setup
 
-1. Download the map converter tool [here](/downloads/mapper_v1_debug.7z)
+1. Download the map converter tool [here](/downloads/mapper_v2.7z)
 
 2. If you do not already have radiant, you can download it here: [NetRadiantCustom](https://github.com/Garux/netradiant-custom/releases)
 
